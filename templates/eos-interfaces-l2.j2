@@ -1,0 +1,34 @@
+{% if (l2 is defined) and l2 %}
+{%- for interface in l2 %}
+{% for key, value in interface.items() %}
+{% for port in key | expand_interfaces %}
+interface {{ port }}
+{% if (value.description is defined) and value.description %}
+   description {{ value.description }}
+{% endif %}
+{% if (value.switchport_mode is defined) and value.switchport_mode and "trunk" in value.switchport_mode %}
+   switchport trunk native vlan {{ native_vlan }}
+{#{% if value.vlans %}
+   switchport trunk allowed {% for items in value.vlans %}{{ vlans[items] }} {% endfor %}
+{% endif %}#}
+   switchport mode trunk
+{% if value.trunk_groups %}
+   switchport trunk group {% for trunk_group in value.trunk_groups %}{{ trunk_group }}{% endfor %}
+
+{% endif %}
+{% elif (value.switchport_mode is defined) and value.switchport_mode and "access" in value.switchport_mode %}
+{#   switchport mode access#}
+{% if (value.vlan is defined) and value.vlan %}
+   switchport access vlan {{ value.vlan }}
+{% else %}
+   switchport access vlan {{ unused_port_vlan }}
+{% endif %}
+{% else %}
+   shutdown
+   switchport access vlan {{ unused_port_vlan }}
+{% endif %}
+!
+{% endfor %}
+{% endfor %}
+{% endfor %}
+{% endif %}

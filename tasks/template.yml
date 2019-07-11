@@ -1,0 +1,35 @@
+- name: Ensure config dir exists
+  delegate_to: localhost
+  run_once: true
+  file:
+    path: "{{ build_dir }}"
+    state: directory
+  tags:
+    - "eos"
+
+- name: Configure EOS L2 interface
+  template:
+    src: "eos-interfaces-l2v2.j2"
+    dest: "{{ build_dir }}"
+  tags:
+    - "eos"
+    - "lacp"
+    - "l2"
+
+- name: Configure EOS LACP interface
+  template:
+    src: "eos-interfaces-lacp.j2"
+    dest: "{{ build_dir }}"
+  tags:
+    - "eos"
+    - "lacp"
+    - "interfaces"
+
+- name:  Template EOS SVI interface
+  template:
+    src: "eos-interfaces-svi.j2"
+    dest: "{{ build_dir }}"
+  tags:
+    - "eos"
+    - "svi"
+    - "interfaces"

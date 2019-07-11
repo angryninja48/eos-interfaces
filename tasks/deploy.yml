@@ -1,0 +1,44 @@
+- name: Configure EOS L2 interface
+  eos_config:
+    src: "eos-interfaces-l2.j2"
+  notify: eos_save
+  tags:
+    - "eos"
+    - "l2"
+    - "interfaces"
+
+- name: Configure EOS LACP interface
+  eos_config:
+    src: "eos-interfaces-lacp.j2"
+  notify: eos_save
+  tags:
+    - "eos"
+    - "lacp"
+    - "interfaces"
+
+- name:  Configure EOS SVI interface
+  eos_config:
+    src: "eos-interfaces-svi.j2"
+  notify: eos_save
+  tags:
+    - "eos"
+    - "svi"
+    - "interfaces"
+
+- name: Configure EOS P2P interface
+  eos_config:
+    src: "eos-interfaces-p2p.j2"
+  notify: eos_save
+  tags:
+    - "eos"
+    - "p2p"
+    - "interfaces"
+
+- name: Configure EOS MGMT interface
+  eos_config:
+    src: "eos-interfaces-mgmt.j2"
+  notify: eos_save
+  tags:
+    - "eos"
+    - "mgmt"
+    - "interfaces"

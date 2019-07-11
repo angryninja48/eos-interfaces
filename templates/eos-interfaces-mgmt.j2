@@ -1,0 +1,8 @@
+{% if (management is defined) and management %}
+interface {{ management.interface }}
+{% if (management.vrf is defined) and management.vrf and management.vrf != 'default' | lower %}
+   vrf forwarding {{ management.vrf }}
+{% endif %}
+   ip address {{ management.ipv4 }}/{{ management.subnet_mask | default('24',true) }}
+!
+{% endif %}

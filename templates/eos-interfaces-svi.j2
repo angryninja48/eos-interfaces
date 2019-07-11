@@ -1,0 +1,29 @@
+{% if (svi is defined) and svi %}
+{%- for interface in svi %}
+{% for key, value in interface.items() %}
+interface Vlan{{ key }}
+{% if (value.description is defined) and value.description %}
+   description {{ value.description }}
+{% endif %}
+{% if (value.autostate is defined) and value.autostate %}
+   no autostate
+{% endif %}
+{% if (value.vrf is defined) and value.vrf %}
+   vrf forwarding {{ value.vrf }}
+{% endif %}
+{% if (value.pipv4 is defined) and value.pipv4 %}
+   ip address {{ value.pipv4 }}/{{ value.subnet_mask | default('24',true) }}
+{% endif %}
+{% if (value.vipv4 is defined) and value.vipv4 %}
+   ip virtual-router address {{ value.vipv4 }}
+{% endif %}
+{% if (value.mtu is defined) and value.mtu %}
+   mtu {{ value.mtu }}
+{% endif %}
+!
+{% endfor %}
+{% endfor %}
+{% endif %}
+{% if (virtual_router_mac_address is defined) and virtual_router_mac_address %}
+ip virtual-router mac-address {{ virtual_router_mac_address }}
+{% endif %}

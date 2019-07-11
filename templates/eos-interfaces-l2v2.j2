@@ -1,0 +1,15 @@
+{% if (l2 is defined) and l2 %}
+{%- for interface in l2 %}
+{% for key, value in interface.items() %}
+interface {{ key }}
+{% if (value.description is defined) and value.description %}
+   description {{ value.description }}
+{% endif %}
+{% if (value.vlan is defined) and value.vlan %}
+   switchport access vlan {{ value.vlan }}
+{% else %}
+   switchport access vlan {{ unused_port_vlan }}
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}

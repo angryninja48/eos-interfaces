@@ -1,0 +1,33 @@
+build_dir: "{{ playbook_dir }}/configs"
+
+l2: ""
+# Access port
+#- Ethernet43-48: { description: dc-infra, switchport_mode: access, vlan: 2701 }
+# Trunk port
+#- Ethernet49-50: { description: core-uplink, switchport_mode: trunk, trunk_groups: ['core-uplink'] }
+
+svi: ""
+# SVI
+#- 100: { pipv4: 10.0.0.0, subnet_mask: 24 }
+# SVI with Autostate off
+#- 4094: { pipv4: 169.254.1.0, subnet_mask: 31, autostate: "off" }
+# Virtual IPv4 Address and Physical Address for SVI
+#- 2703: { vrf: server-ilo, pipv4: 10.167.139.253, vipv4: 10.167.139.254, subnet_mask: 23 }
+
+
+p2p: ""
+# Example:
+# Subinterfaces
+#- Ethernet4:
+#    subinterfaces:
+#      - { vlan: 2700, vrf: test, ipv4: 10.1.1.1, subnet_mask: 24 }
+#
+# Routed Interface
+#- Ethernet5: { vrf: test, ipv4: 10.1.1.1, subnet_mask: 24 }
+
+port_channel: ""
+# Port channel with Mlag
+#- 1: { members: ['Ethernet1'], description: access-switch, mlag: true, switchport_mode: trunk, trunk_groups: ['access-downlink'] }
+
+# Portchannel without mlag
+#- 49: { members: ['Ethernet49', 'Ethernet50'], description: uplink, switchport_mode: trunk, trunk_groups: ['core-uplink'] }

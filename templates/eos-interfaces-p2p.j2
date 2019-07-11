@@ -1,0 +1,39 @@
+{% if (p2p is defined) and p2p %}
+{%- for interface in p2p %}
+{% for key, value in interface.items() %}
+interface {{ key }}
+{% if (value.subinterfaces is defined) and value.subinterfaces %}
+   no switchport
+!
+{% for subinterface in value.subinterfaces %}
+interface {{ key }}.{{ subinterface.vlan }}
+{% if (subinterface.description is defined) and subinterface.description %}
+   description {{ subinterface.description }}
+{% endif %}
+{% if (subinterface.vlan is defined) and subinterface.vlan %}
+   encapsulation dot1q vlan {{ subinterface.vlan }}
+{% endif %}
+{% if (subinterface.vrf is defined) and subinterface.vrf %}
+   vrf forwarding {{ subinterface.vrf }}
+{% endif %}
+{% if (subinterface.ipv4 is defined) and subinterface.ipv4 %}
+   ip address {{ subinterface.ipv4 }}/{{ subinterface.subnet_mask | default('24',true) }}
+{% endif %}
+!
+{% endfor %}
+{% else %}
+   no switchport
+{% if (value.description is defined) and value.description %}
+   description {{ value.description }}
+{% endif %}
+{% if (value.vrf is defined) and value.vrf %}
+   vrf forwarding {{ value.vrf }}
+{% endif %}
+{% if (value.ipv4 is defined) and value.ipv4 %}
+   ip address {{ value.ipv4 }}/{{ value.subnet_mask | default('24',true) }}
+{% endif %}
+!
+{% endif %}
+{% endfor %}
+{% endfor %}
+{% endif %}

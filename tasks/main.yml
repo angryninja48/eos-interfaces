@@ -1,0 +1,13 @@
+- include: deploy.yml
+  when: "'eos' in group_names and deploy|default(false)"
+  tags:
+    - "eos"
+    - "interfaces"
+
+
+- include: template.yml
+  when: "'eos' in group_names and template|default(false)"
+  delegate_to: localhost
+  tags:
+    - "eos"
+    - "svi"

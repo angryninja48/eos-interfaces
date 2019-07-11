@@ -1,0 +1,4 @@
+---
+- name: eos_save
+  eos_config:
+    save_when: always

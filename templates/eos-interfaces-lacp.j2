@@ -1,0 +1,49 @@
+{% if (port_channel is defined) and port_channel %}
+{%- for interface in port_channel %}
+{% for key, value in interface.items() %}
+{% if (value.members is defined) and value.members %}
+{% for member in value.members %}
+interface {{ member }}
+   channel-group {{ key }} mode active
+!
+{% endfor %}
+{% endif %}
+interface Port-Channel{{ key }}
+{% if (value.description is defined) and value.description %}
+   description {{ value.description }}
+{% endif %}
+{% if (value.switchport_mode is defined) and value.switchport_mode and "trunk" in value.switchport_mode %}
+   switchport trunk native vlan {{ native_vlan }}
+{#{% if value.vlans %}
+   switchport trunk allowed {% for items in value.vlans %}{{ vlans[items] }} {% endfor %}
+{% endif %}#}
+   switchport mode trunk
+{% if value.trunk_groups %}
+{% for trunk_group in value.trunk_groups %}
+   switchport trunk group {{ trunk_group }}
+{% endfor %}
+{% endif %}
+{% if (value.fallback is defined) and value.fallback %}
+   port-channel lacp fallback static
+{% endif %}
+{% if (value.mlag is defined) and value.mlag %}
+   mlag {{ key | regex_replace('\D') }}
+{% endif %}
+{% elif (value.switchport_mode is defined) and value.switchport_mode and "access" in value.switchport_mode %}
+   switchport mode access
+{% if (value.vlan is defined) and value.vlan %}
+   switchport access vlan {{ value.vlan }}
+{% else %}
+   switchport access vlan {{ unused_port_vlan }}
+{% endif %}
+{% if (value.mlag is defined) and value.mlag %}
+   mlag {{ key | regex_replace('\D') }}
+{% endif %}
+{% else %}
+   shutdown
+   switchport access vlan {{ unused_port_vlan }}
+{% endif %}
+!
+{% endfor %}
+{% endfor %}
+{% endif %}
